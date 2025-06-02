@@ -1,10 +1,7 @@
-function App() {
+function Footer() {
   return (
     //Só pode ter uma tag de retorno
-    <>
-    <h1>FrontEnd I</h1>
-    <h1>Amo dormir, Amo gatos e Amo café</h1>
-    </>
+    <h1>Footer</h1>
 
     //Ou você encapsula em uma tag
     //Ou você usar uma tag chamada Fragment <></>
@@ -12,4 +9,4 @@ function App() {
   )
 }
 
-export default App
+export default Footer
