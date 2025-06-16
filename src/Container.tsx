@@ -41,19 +41,84 @@
 // export default Container;
 
 import { useState } from 'react';
-interface ContainerProps {
+interface ProdutosState {
+  id: number;
   nome: string;
+  preco: number;
+  categoria: string;
 }
-function Container(props:ContainerProps){ 
-  const [texto, setTexto] = useState("Texto antes de Mudar")
-  function mudar() {
-    setTexto("Texto depois de Mudar")
+
+
+function Container(){ 
+  const [id, setId] = useState("")
+  const [nome, setNome] = useState("")
+  const [preco, setPreco] = useState("")
+  const [categoria, setGategoria] = useState("")
+
+  const [produtos, setProdutos] = useState<ProdutosState[]>([
+    { id:1, nome:"Computador", 
+      preco: 3500, 
+      categoria: "Informática" }
+  ])
+  function trataForm(event: React.FormEvent<HTMLInputElement>){
+    event.preventDefault();
+    // Pegar os dados que a pessoa está cadastrando no formulario e inserir no array de produtos.
+    const produtoNovo: ProdutosState = {
+      id: parseInt(id), // Gerar um novo ID baseado no tamanho do array
+      nome: nome,
+      preco: parseFloat(preco), // Converter o preço para número
+      categoria: categoria
+    }
+    setProdutos([...produtos, produtoNovo])
   }
+  function trataId(event: React.ChangeEvent<HTMLInputElement>){
+    // Pegar o valor do input de id e atualizar o estado id
+    setId(event.target.value);
+  }
+  function trataNome(event: React.ChangeEvent<HTMLInputElement>){
+    // Pegar o valor do input de nome e atualizar o estado nome
+    setNome(event.target.value);
+  }
+  function trataPreco(event: React.ChangeEvent<HTMLInputElement>){
+    // Pegar o valor do input de preco e atualizar o estado preco
+    setPreco(event.target.value);
+  }
+  function trataCategoria(event: React.ChangeEvent<HTMLInputElement>){
+    // Pegar o valor do input de categoria e atualizar o estado categoria
+    setGategoria(event.target.value);
+  }
+
   return(
     <>
-      <h1>{props.nome}</h1>
-      <p>{texto}</p>
-      <button onClick={mudar}>Mudar Estado</button>
+    <div className="container">
+      {produtos[0].nome}
+        <div className="container-cadastro">
+            <form onSubmit={trataForm}>
+                <input type="text" name="id" id="id" onChange={trataId}/>
+                <input type="text" name="nome" id="nome" onChange={trataNome}/>
+                <input type="text" name="preco" id="preco" onChange={trataPreco}/>
+                <input type="text" name="categoria" id="categoria" onChange={trataCategoria}/>
+                <input type="submit" value="Cadastrar" />
+            </form>
+        </div>
+        <div className="container-listagem">
+            {produtos.map(produto=>{
+                return(
+                    <div className="container-produto">
+                        <div className="produto-nome">
+                            {produto.nome}
+                        </div>
+                        <div className="produto-preco">
+                            {produto.preco}
+                        </div>
+                        <div className="produto-categoria">
+                            {produto.categoria}
+                        </div>
+                    </div>
+                )
+            })}
+        </div>
+    </div> 
     </>
   )
 }

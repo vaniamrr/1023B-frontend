@@ -2,7 +2,7 @@ function Header() {
   return (
     <header>
         <nav>
-            <div>
+            <div className="header-links">
                 <a href="">Central do vendedor</a>
                 <a href="">Vender na Shopee</a>
                 <a href="">Baixe o app</a>
@@ -29,7 +29,7 @@ function Header() {
                 </li>
             </ul>   
         </nav>
-        <div className="container">
+        <div className="header-container">
             <div>Logo</div>
             <div>
                 <input type="text" placeholder="Buscar na Shopee"/>

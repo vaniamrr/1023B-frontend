@@ -9,3 +9,21 @@ header{
     right: 0;
     left: 0;
 }
+nav{
+    display: flex;
+    justify-content: space-between;
+}
+nav>ul{
+    margin: 0;
+    display: flex;
+}
+nav>ul>li{
+    list-style: none;
+    padding: 0;
+}
+nav>ul>li>a{
+    padding: 0px 15px;
+}
+.header-links>a{
+    padding: 0px 15px;
+}
