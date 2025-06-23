@@ -40,7 +40,9 @@
 // }
 // export default Container;
 
-import { useState } from 'react';
+import { useEffect, useState } from "react";
+import './Container.css';
+
 interface ProdutosState {
   id: number;
   nome: string;
@@ -48,56 +50,69 @@ interface ProdutosState {
   categoria: string;
 }
 
-
-function Container(){ 
-  const [id, setId] = useState("")
-  const [nome, setNome] = useState("")
-  const [preco, setPreco] = useState("")
-  const [categoria, setGategoria] = useState("")
-
-  const [produtos, setProdutos] = useState<ProdutosState[]>([
-    { id:1, nome:"Computador", 
-      preco: 3500, 
-      categoria: "Informática" }
-  ])
-  function trataForm(event: React.FormEvent<HTMLInputElement>){
-    event.preventDefault();
-    // Pegar os dados que a pessoa está cadastrando no formulario e inserir no array de produtos.
-    const produtoNovo: ProdutosState = {
-      id: parseInt(id), // Gerar um novo ID baseado no tamanho do array
-      nome: nome,
-      preco: parseFloat(preco), // Converter o preço para número
-      categoria: categoria
+function Container(){
+  const [id,setId] = useState("");
+  const [nome,setNome] = useState("");
+  const [preco,setPreco] = useState("");
+  const [erroMensagem,setErroMensagem] = useState("");
+  const [categoria,setCategoria] = useState("");
+  const [produtos,setProdutos] = useState<ProdutosState[]>([]);
+  useEffect(()=>{
+    const fetchData = async () => {
+      try{
+    const resposta = await fetch("https://localhost:8000/produtos")
+    const result = await resposta.json();
+    setProdutos(result);
+    }catch(erro:any){
+      setErroMensagem("Erro ao realizar o fetch no bakend");
     }
-    setProdutos([...produtos, produtoNovo])
   }
+    fetchData();
+  },[]); //[] lista de dependências, quando ela muda o useEffect é executado novamente
+  // useEffect é um hook que permite executar código quando o componente é montado, atualizado ou desmontado
+  function trataForm(event: React.FormEvent<HTMLFormElement>){
+    event.preventDefault();
+    const produtoNovo: ProdutosState = {
+      id: parseInt(id),
+      nome,
+      preco: parseFloat(preco),
+      categoria
+    };
+    setProdutos([...produtos, produtoNovo]);
+  }
+    
+  // Pegar os dados que a pessoa digitou no formulário
+    // e inserir isso no array de produtos 
   function trataId(event: React.ChangeEvent<HTMLInputElement>){
-    // Pegar o valor do input de id e atualizar o estado id
     setId(event.target.value);
   }
   function trataNome(event: React.ChangeEvent<HTMLInputElement>){
-    // Pegar o valor do input de nome e atualizar o estado nome
     setNome(event.target.value);
   }
   function trataPreco(event: React.ChangeEvent<HTMLInputElement>){
-    // Pegar o valor do input de preco e atualizar o estado preco
     setPreco(event.target.value);
   }
   function trataCategoria(event: React.ChangeEvent<HTMLInputElement>){
-    // Pegar o valor do input de categoria e atualizar o estado categoria
-    setGategoria(event.target.value);
+    setCategoria(event.target.value);
   }
-
   return(
     <>
-    <div className="container">
-      {produtos[0].nome}
+    {erroMensagem &&
+    <div className="mensagem-erro">
+      <p>{erroMensagem}</p>
+    </div>
+    }
+
+      <div className="container">
+        <div className="mensagem-erro">
+          <p>{erroMensagem}</p>
+        </div>
         <div className="container-cadastro">
             <form onSubmit={trataForm}>
-                <input type="text" name="id" id="id" onChange={trataId}/>
-                <input type="text" name="nome" id="nome" onChange={trataNome}/>
-                <input type="text" name="preco" id="preco" onChange={trataPreco}/>
-                <input type="text" name="categoria" id="categoria" onChange={trataCategoria}/>
+                <input type="text" name="id" id="id" onChange={trataId} />
+                <input type="text" name="nome" id="nome" onChange={trataNome} />
+                <input type="text" name="preco" id="preco" onChange={trataPreco} />
+                <input type="text" name="categoria" id="categoria" onChange={trataCategoria} />
                 <input type="submit" value="Cadastrar" />
             </form>
         </div>
@@ -118,7 +133,7 @@ function Container(){
                 )
             })}
         </div>
-    </div> 
+      </div>
     </>
   )
 }

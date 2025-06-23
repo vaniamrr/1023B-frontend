@@ -1,13 +1,14 @@
 :root{
-    --cor-primaria: #ee4d2d;
-    --gradiente-primario: linear-gradient(to right, #ee4d2d, #ff7337);
+    --cor-primaria: #ffffff;
+    --gradiente-primario: linear-gradient(to right, #8469ff, #831be4);
 }
 header{
     background: var(--gradiente-primario);
-    position: fixad;
+    position: fixed;
     top: 0;
     right: 0;
     left: 0;
+    height: 120px;
 }
 nav{
     display: flex;
